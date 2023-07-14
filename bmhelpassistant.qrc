@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/bmhelpassistant">
+        <file>images/bmhelpassistant.png</file>
+        <file>images/wrap.png</file>
+        <file>images/bookmark.png</file>
+        <file>images/addtab.png</file>
+        <file>images/book.png</file>
+        <file>images/closetab.png</file>
+        <file>images/editcopy.png</file>
+        <file>images/find.png</file>
+        <file>images/home.png</file>
+        <file>images/forward.png</file>
+        <file>images/backward.png</file>
+        <file>images/print.png</file>
+        <file>images/synctoc.png</file>
+        <file>images/zoomin.png</file>
+        <file>images/zoomout.png</file>
+        <file>images/resetzoom.png</file>
+        <file>images/closebutton.png</file>
+        <file>images/darkclosebutton.png</file>
+    </qresource>
+</RCC>
