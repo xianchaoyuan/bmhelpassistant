@@ -1,10 +1,15 @@
 #include "mainwindow.h"
+#include "contentwidget.h"
 #include "centralwidget.h"
 #include "globalactions.h"
+#include "openpagesmanager.h"
+#include "helpenginewrapper.h"
 
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QDockWidget>
+#include <QtGui/QGuiApplication>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,8 +17,21 @@ MainWindow::MainWindow(QWidget *parent)
     setToolButtonStyle(Qt::ToolButtonFollowStyle);
     setDockOptions(dockOptions() | AllowNestedDocks);
 
+    HelpEngineWrapper::instance(MainWindow::defaultHelpCollectionFileName());
+
     m_centralWidget = new CentralWidget(this);
     setCentralWidget(m_centralWidget);
+
+    m_contentWidget = new ContentWidget(this);
+    QDockWidget *contentDock = new QDockWidget(tr("Contents"), this);
+    contentDock->setObjectName(QLatin1String("ContentWidget"));
+    contentDock->setWidget(m_contentWidget);
+    addDockWidget(Qt::LeftDockWidgetArea, contentDock);
+    connect(m_contentWidget, &ContentWidget::linkActivated,
+            m_centralWidget, &CentralWidget::setSource);
+
+    // openpages 管理初始化，必须在中央窗口创建之后
+    OpenPagesManager::createInstance(this, QUrl{});
 
     // 默认标题
     QString defWindowTitle = tr("bmseven");
@@ -21,25 +39,42 @@ MainWindow::MainWindow(QWidget *parent)
 
     setupActions();
     statusBar()->show();
+    m_centralWidget->connectTabBar();
 }
 
 MainWindow::~MainWindow()
 {
 }
 
+QString MainWindow::defaultHelpCollectionFileName()
+{
+    // TODO 临时使用
+//    return QString("https://www.baidu.com");
+    return QString("C:/Users/yxc/Desktop/jiaoxue/teaching.qhc");
+    return QString("C:/Users/yxc/Desktop/BmHelp/bmhelp.qhc");
+}
+
 void MainWindow::syncContents()
 {
-
+    qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
+    const QUrl url = m_centralWidget->currentSource();
+    showContents();
+    if (!m_contentWidget->syncToContent(url))
+        statusBar()->showMessage(
+            tr("Could not find the associated content item."), 3000);
+    qApp->restoreOverrideCursor();
 }
 
 void MainWindow::showContents()
 {
-
+    activateDockWidget(m_contentWidget);
 }
 
-void MainWindow::showOpenPages()
+void MainWindow::activateDockWidget(QWidget *w)
 {
-
+    w->parentWidget()->show();
+    w->parentWidget()->raise();
+    w->setFocus();
 }
 
 void MainWindow::setupActions()
@@ -47,7 +82,9 @@ void MainWindow::setupActions()
     QString resourcePath = QLatin1String(":/bmhelpassistant/images/");
 
     QMenu *menu = menuBar()->addMenu(tr("&File"));
-    m_newTabAction = menu->addAction(tr("&New Tab"));
+    OpenPagesManager * const openPages = OpenPagesManager::instance();
+    m_newTabAction = menu->addAction(tr("&New Tab"),
+                                     openPages, &OpenPagesManager::createBlankPage);
     m_newTabAction->setShortcut(QKeySequence::AddTab);
 
     menu->addSeparator();
@@ -77,8 +114,6 @@ void MainWindow::setupActions()
     menu->addSeparator();
     menu->addAction(tr("Contents"),
                           this, &MainWindow::showContents, QKeySequence(tr("ALT+C")));
-    menu->addAction(tr("Open Pages"),
-                          this, &MainWindow::showOpenPages, QKeySequence(tr("ALT+P")));
 
     menu = menuBar()->addMenu(tr("&Go"));
     menu->addAction(globalActions->homeAction());
@@ -92,11 +127,11 @@ void MainWindow::setupActions()
 
     menu->addSeparator();
 
-    tmp = menu->addAction(tr("Next Page"));
+    tmp = menu->addAction(tr("Next Page"), openPages, &OpenPagesManager::nextPage);
     tmp->setShortcuts(QList<QKeySequence>() << QKeySequence(tr("Ctrl+Alt+Right"))
                                             << QKeySequence(Qt::CTRL | Qt::Key_PageDown));
 
-    tmp = menu->addAction(tr("Previous Page"));
+    tmp = menu->addAction(tr("Previous Page"), openPages, &OpenPagesManager::previousPage);
     tmp->setShortcuts(QList<QKeySequence>() << QKeySequence(tr("Ctrl+Alt+Left"))
                                             << QKeySequence(Qt::CTRL | Qt::Key_PageUp));
 
@@ -112,5 +147,10 @@ void MainWindow::setupActions()
     navigationBar->addAction(globalActions->zoomInAction());
     navigationBar->addAction(globalActions->zoomOutAction());
     navigationBar->addAction(globalActions->resetZoomAction());
+
+    connect(m_centralWidget, &CentralWidget::currentViewerChanged,
+            globalActions, &GlobalActions::updateActions);
+    connect(m_centralWidget, &CentralWidget::currentViewerLoadFinished,
+            globalActions, &GlobalActions::updateActions);
 }
 

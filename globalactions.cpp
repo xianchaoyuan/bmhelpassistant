@@ -7,6 +7,13 @@ GlobalActions *GlobalActions::instance(QObject *parent)
     return self;
 }
 
+void GlobalActions::updateActions()
+{
+    CentralWidget *centralWidget = CentralWidget::instance();
+    m_backwardAction->setEnabled(centralWidget->isBackwardAvailable());
+    m_forwardAction->setEnabled(centralWidget->isForwardAvailable());
+}
+
 GlobalActions::GlobalActions(QObject *parent)
     : QObject(parent)
 {

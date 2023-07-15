@@ -16,6 +16,9 @@ public:
     static GlobalActions *instance(QObject *parent = nullptr);
     ~GlobalActions() = default;
 
+    //! 更新导航
+    void updateActions();
+
     QList<QAction *> actionList() const { return m_actionList; }
     QAction *backwardAction() const { return m_backwardAction; }
     QAction *forwardAction() const { return m_forwardAction; }

@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 
 class CentralWidget;
+class ContentWidget;
 
 /**
  * @brief 主窗口
@@ -16,18 +17,22 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+    //! 默认帮助集文件
+    static QString defaultHelpCollectionFileName();
+
 public slots:
     //! 同步内容
     void syncContents();
 
 private slots:
     void showContents();
-    void showOpenPages();
+    void activateDockWidget(QWidget *w);
 
 private:
     void setupActions();
 
 private:
+    ContentWidget *m_contentWidget{};
     CentralWidget *m_centralWidget{};
 
     QAction *m_newTabAction{};
