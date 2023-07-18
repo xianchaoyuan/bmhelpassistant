@@ -6,6 +6,7 @@
 #include <QtWidgets/QStackedWidget>
 
 class HelpViewer;
+class FindWidget;
 
 /**
  * @brief 选项卡
@@ -83,6 +84,13 @@ public slots:
 
     void setSource(const QUrl &url);
 
+    void clearFind();
+    void findNext();
+    void findPrevious();
+    void find(const QString &text, bool forward);
+
+    void showFindWidget();
+
 private:
     void addPage(HelpViewer *page, bool fromSearch = false);
     void removePage(int index);
@@ -95,6 +103,7 @@ signals:
 private:
     TabBar *m_tabBar;
     QStackedWidget *m_stackedWidget{};
+    FindWidget *m_findWidget;
 };
 
 #endif // CENTRALWIDGET_H

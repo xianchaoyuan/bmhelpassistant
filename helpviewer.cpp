@@ -180,6 +180,21 @@ bool HelpViewer::launchWithExternalApp(const QUrl &url)
     return QDesktopServices::openUrl(url);
 }
 
+void HelpViewer::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu *menu = page()->createStandardContextMenu();
+    QList<QAction*> acts = menu->actions();
+    for (auto &act : acts) {
+        if (act->text().contains("Save page")
+            || act->text().contains("View page source")) {
+            menu->removeAction(act);
+        }
+    }
+
+    menu->exec(event->globalPos());
+    delete menu;
+}
+
 WebOperate::WebOperate(QObject *parent)
     : QObject(parent)
 {}

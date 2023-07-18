@@ -97,6 +97,15 @@ void HelpAssistant::setupActions()
     tmp->setMenuRole(QAction::QuitRole);
 
     menu = menuBar()->addMenu(tr("&Edit"));
+    menu->addAction(globalActions->findAction());
+
+    QAction *findNextAction = menu->addAction(tr("Find &Next"),
+                                              m_centralWidget, &CentralWidget::findNext);
+    findNextAction->setShortcuts(QKeySequence::FindNext);
+
+    QAction *findPreviousAction = menu->addAction(tr("Find &Previous"),
+                                                  m_centralWidget, &CentralWidget::findPrevious);
+    findPreviousAction->setShortcuts(QKeySequence::FindPrevious);
 
     menu = menuBar()->addMenu(tr("&View"));
     menu->addAction(globalActions->zoomInAction());

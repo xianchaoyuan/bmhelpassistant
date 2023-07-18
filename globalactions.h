@@ -24,6 +24,7 @@ public:
     QAction *forwardAction() const { return m_forwardAction; }
     QAction *homeAction() const { return m_homeAction; }
     QAction *printAction() const { return m_printAction; }
+    QAction *findAction() const { return m_findAction; }
     QAction *zoomInAction() const { return m_zoomInAction; }
     QAction *zoomOutAction() const { return m_zoomOutAction; }
     QAction *resetZoomAction() const { return m_resetZoomAction; }
@@ -36,6 +37,7 @@ private:
     QAction *m_forwardAction;
     QAction *m_homeAction;
     QAction *m_printAction;
+    QAction *m_findAction;
     QAction *m_zoomInAction;
     QAction *m_zoomOutAction;
     QAction *m_resetZoomAction{};

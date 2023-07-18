@@ -77,5 +77,12 @@ GlobalActions::GlobalActions(QObject *parent)
     m_printAction->setShortcut(QKeySequence::Print);
     connect(m_printAction, &QAction::triggered, centralWidget, &CentralWidget::print);
     m_actionList << m_printAction;
+
+    m_findAction = new QAction(tr("&Find in Text..."), parent);
+    m_findAction->setIconText(tr("&Find"));
+    m_findAction->setIcon(QIcon(resourcePath + QLatin1String("/find.png")));
+    m_findAction->setShortcuts(QKeySequence::Find);
+    connect(m_findAction, &QAction::triggered, centralWidget, &CentralWidget::showFindWidget);
+    m_actionList << m_findAction;
 }
 

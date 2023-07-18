@@ -1,6 +1,9 @@
 #ifndef HELPVIEWER_H
 #define HELPVIEWER_H
 
+#include <QtGui/QContextMenuEvent>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QAction>
 #include <QtWebChannel/QWebChannel>
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QtWebEngineWidgets/QWebEngineHistory>
@@ -53,6 +56,9 @@ public:
     static bool isLocalUrl(const QUrl &url);
     static bool canOpenPage(const QString &url);
     static bool launchWithExternalApp(const QUrl &url);
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
     HelpViewerPrivate *d;

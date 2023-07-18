@@ -1,4 +1,5 @@
 #include "centralwidget.h"
+#include "findwidget.h"
 #include "helpviewer.h"
 #include "helpenginewrapper.h"
 #include "openpagesmanager.h"
@@ -10,7 +11,7 @@
 #include <QtWebEngineWidgets/QWebEngineHistory>
 
 namespace {
-    CentralWidget *staticCentralWidget = nullptr;
+CentralWidget *staticCentralWidget = nullptr;
 }
 
 TabBar::TabBar(QWidget *parent)
@@ -118,6 +119,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     : QWidget(parent)
     , m_tabBar(new TabBar(this))
     , m_stackedWidget(new QStackedWidget(this))
+    , m_findWidget(new FindWidget(this))
 {
     staticCentralWidget = this;
 
@@ -127,6 +129,13 @@ CentralWidget::CentralWidget(QWidget *parent)
     vboxLayout->addWidget(m_tabBar);
     m_tabBar->setVisible(true);
     vboxLayout->addWidget(m_stackedWidget);
+    vboxLayout->addWidget(m_findWidget);
+    m_findWidget->hide();
+
+    connect(m_findWidget, &FindWidget::clearFind, this, &CentralWidget::clearFind);
+    connect(m_findWidget, &FindWidget::findNext, this, &CentralWidget::findNext);
+    connect(m_findWidget, &FindWidget::findPrevious, this, &CentralWidget::findPrevious);
+    connect(m_findWidget, &FindWidget::find, this, &CentralWidget::find);
 }
 
 CentralWidget::~CentralWidget()
@@ -229,6 +238,42 @@ void CentralWidget::setSource(const QUrl &url)
     HelpViewer *viewer = currentHelpViewer();
     viewer->setSource(url);
     viewer->setFocus(Qt::OtherFocusReason);
+}
+
+void CentralWidget::clearFind()
+{
+    HelpViewer *viewer = currentHelpViewer();
+    viewer->findText(QString(""));
+}
+
+void CentralWidget::findNext()
+{
+    find(m_findWidget->text(), true);
+}
+
+void CentralWidget::findPrevious()
+{
+    find(m_findWidget->text(), false);
+}
+
+void CentralWidget::find(const QString &text, bool forward)
+{
+    if (HelpViewer *viewer = currentHelpViewer()) {
+        QWebEnginePage::FindFlags flags;
+        if (!forward)
+            flags |= QWebEnginePage::FindBackward;
+        if (m_findWidget->caseSensitive())
+            flags |= QWebEnginePage::FindCaseSensitively;
+        viewer->findText(text, flags);
+    }
+
+    if (!m_findWidget->isVisible())
+        m_findWidget->show();
+}
+
+void CentralWidget::showFindWidget()
+{
+    m_findWidget->show();
 }
 
 void CentralWidget::addPage(HelpViewer *page, bool fromSearch)
