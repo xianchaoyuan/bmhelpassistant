@@ -1,8 +1,24 @@
 #ifndef HELPVIEWER_H
 #define HELPVIEWER_H
 
+#include <QtWebChannel/QWebChannel>
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QtWebEngineWidgets/QWebEngineHistory>
+
+/**
+ * @brief web操作
+ */
+class WebOperate : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit WebOperate(QObject *parent = nullptr);
+    ~WebOperate() = default;
+
+public slots:
+    void bmFunc(const QString &message);
+};
 
 /**
  * @brief 阅读器
@@ -40,6 +56,8 @@ public:
 
 private:
     HelpViewerPrivate *d;
+    QWebChannel *m_channel;
+    WebOperate *m_webOperate;
 };
 
 Q_DECLARE_METATYPE(HelpViewer *)

@@ -52,7 +52,7 @@ void CollectionConfiguration::setLastZoomFactors(QHelpEngineCore &helpEngine,
 
 int CollectionConfiguration::lastTabPage(const QHelpEngineCore &helpEngine)
 {
-    return helpEngine.customValue(LastPageKey, 1).toInt();
+    return helpEngine.customValue(LastPageKey, 0).toInt();
 }
 
 void CollectionConfiguration::setLastTabPage(QHelpEngineCore &helpEngine,

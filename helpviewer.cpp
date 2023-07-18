@@ -7,6 +7,7 @@
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QCoreApplication>
 #include <QtGui/QDesktopServices>
+#include <QtWidgets/QDialog>
 
 struct ExtensionMap {
     const char *extension;
@@ -56,7 +57,11 @@ const QString HelpViewer::PageNotFoundMessage =
 HelpViewer::HelpViewer(qreal zoom, QWidget *parent)
     : QWebEngineView(parent)
     , d(new HelpViewerPrivate(zoom))
+    , m_channel(new QWebChannel(this))
+    , m_webOperate(new WebOperate(this))
 {
+    m_channel->registerObject(QString("myWebOperate"), m_webOperate);
+    page()->setWebChannel(m_channel);
 }
 
 HelpViewer::~HelpViewer()
@@ -173,4 +178,15 @@ bool HelpViewer::launchWithExternalApp(const QUrl &url)
         return false;
     }
     return QDesktopServices::openUrl(url);
+}
+
+WebOperate::WebOperate(QObject *parent)
+    : QObject(parent)
+{}
+
+void WebOperate::bmFunc(const QString &message)
+{
+    // TODO 测试使用
+    QDialog dialog;
+    auto ret = dialog.exec();
 }
