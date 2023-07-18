@@ -17,7 +17,7 @@ ContentWidget::ContentWidget(QWidget *parent)
     m_contentWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setContentsMargins(4, 4, 4, 4);
+    layout->setContentsMargins(4, 4, 4, 0);
     layout->addWidget(m_contentWidget);
 
     connect(m_contentWidget, &QWidget::customContextMenuRequested,

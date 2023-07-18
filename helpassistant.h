@@ -9,16 +9,13 @@ class ContentWidget;
 /**
  * @brief 主窗口
  */
-class MainWindow : public QMainWindow
+class HelpAssistant : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow() override;
-
-    //! 默认帮助集文件
-    static QString defaultHelpCollectionFileName();
+    explicit HelpAssistant(const QString &collectionFile, QWidget *parent = nullptr);
+    ~HelpAssistant() override;
 
 public slots:
     //! 同步内容

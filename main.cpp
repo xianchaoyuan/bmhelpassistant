@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "helpassistant.h"
 #include "helpenginewrapper.h"
 #include "helpschemehandler.h"
 
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     HelpSchemeHandler handle;
     handle.install();
 
-    MainWindow w;
+    HelpAssistant w(QString("C:/Users/yxc/Desktop/jiaoxue/teaching.qhc"));
     w.show();
 
     return a.exec();

@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "helpassistant.h"
 #include "contentwidget.h"
 #include "centralwidget.h"
 #include "globalactions.h"
@@ -11,13 +11,13 @@
 #include <QtWidgets/QDockWidget>
 #include <QtGui/QGuiApplication>
 
-MainWindow::MainWindow(QWidget *parent)
+HelpAssistant::HelpAssistant(const QString &collectionFile, QWidget *parent)
     : QMainWindow(parent)
 {
     setToolButtonStyle(Qt::ToolButtonFollowStyle);
     setDockOptions(dockOptions() | AllowNestedDocks);
 
-    HelpEngineWrapper::instance(MainWindow::defaultHelpCollectionFileName());
+    HelpEngineWrapper::instance(collectionFile);
 
     m_centralWidget = new CentralWidget(this);
     setCentralWidget(m_centralWidget);
@@ -42,19 +42,11 @@ MainWindow::MainWindow(QWidget *parent)
     m_centralWidget->connectTabBar();
 }
 
-MainWindow::~MainWindow()
+HelpAssistant::~HelpAssistant()
 {
 }
 
-QString MainWindow::defaultHelpCollectionFileName()
-{
-    // TODO 临时使用
-//    return QString("https://www.baidu.com");
-    return QString("C:/Users/yxc/Desktop/jiaoxue/teaching.qhc");
-    return QString("C:/Users/yxc/Desktop/BmHelp/bmhelp.qhc");
-}
-
-void MainWindow::syncContents()
+void HelpAssistant::syncContents()
 {
     qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
     const QUrl url = m_centralWidget->currentSource();
@@ -65,19 +57,19 @@ void MainWindow::syncContents()
     qApp->restoreOverrideCursor();
 }
 
-void MainWindow::showContents()
+void HelpAssistant::showContents()
 {
     activateDockWidget(m_contentWidget);
 }
 
-void MainWindow::activateDockWidget(QWidget *w)
+void HelpAssistant::activateDockWidget(QWidget *w)
 {
     w->parentWidget()->show();
     w->parentWidget()->raise();
     w->setFocus();
 }
 
-void MainWindow::setupActions()
+void HelpAssistant::setupActions()
 {
     QString resourcePath = QLatin1String(":/bmhelpassistant/images/");
 
@@ -113,7 +105,7 @@ void MainWindow::setupActions()
 
     menu->addSeparator();
     menu->addAction(tr("Contents"),
-                          this, &MainWindow::showContents, QKeySequence(tr("ALT+C")));
+                          this, &HelpAssistant::showContents, QKeySequence(tr("ALT+C")));
 
     menu = menuBar()->addMenu(tr("&Go"));
     menu->addAction(globalActions->homeAction());
@@ -121,7 +113,7 @@ void MainWindow::setupActions()
     menu->addAction(globalActions->forwardAction());
 
     m_syncAction = menu->addAction(tr("Sync with Table of Contents"),
-                                   this, &MainWindow::syncContents);
+                                   this, &HelpAssistant::syncContents);
     m_syncAction->setIconText(tr("Sync"));
     m_syncAction->setIcon(QIcon(resourcePath + QLatin1String("/synctoc.png")));
 
