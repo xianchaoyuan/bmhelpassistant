@@ -130,7 +130,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     vboxLayout->setContentsMargins(QMargins());
     vboxLayout->setSpacing(0);
     vboxLayout->addWidget(m_tabBar);
-    m_tabBar->setVisible(true);
+    m_tabBar->setVisible(false);
     vboxLayout->addWidget(m_stackedWidget);
     vboxLayout->addWidget(m_findWidget);
     m_findWidget->hide();

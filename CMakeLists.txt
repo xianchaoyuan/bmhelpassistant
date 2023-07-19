@@ -19,6 +19,7 @@ set(PROJECT_SOURCES
     findwidget.h findwidget.cpp
     centralwidget.h centralwidget.cpp
     contentwidget.h contentwidget.cpp
+    openpageswidget.h openpageswidget.cpp
 
     collectionconfiguration.h collectionconfiguration.cpp
     openpagesmodel.h openpagesmodel.cpp

@@ -9,6 +9,7 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QDockWidget>
+#include <QtWidgets/QAbstractItemView>
 #include <QtGui/QGuiApplication>
 
 HelpAssistant::HelpAssistant(const QString &collectionFile, QWidget *parent)
@@ -30,8 +31,12 @@ HelpAssistant::HelpAssistant(const QString &collectionFile, QWidget *parent)
     connect(m_contentWidget, &ContentWidget::linkActivated,
             m_centralWidget, &CentralWidget::setSource);
 
-    // openpages 管理初始化，必须在中央窗口创建之后
-    OpenPagesManager::createInstance(this, QUrl{});
+    QDockWidget *openPagesDock = new QDockWidget(tr("Open Pages"), this);
+    openPagesDock->setObjectName(QLatin1String("Open Pages"));
+    OpenPagesManager *openPagesManager
+        = OpenPagesManager::createInstance(this, QUrl{});
+    openPagesDock->setWidget(openPagesManager->openPagesWidget());
+    addDockWidget(Qt::LeftDockWidgetArea, openPagesDock);
 
     // 默认标题
     QString defWindowTitle = tr("bmseven");

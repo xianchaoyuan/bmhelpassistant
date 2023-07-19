@@ -3,10 +3,12 @@
 #include "helpenginewrapper.h"
 #include "helpviewer.h"
 #include "openpagesmodel.h"
+#include "openpageswidget.h"
 #include "collectionconfiguration.h"
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QTreeView>
+#include <QtWidgets/QAbstractItemView>
 
 OpenPagesManager *OpenPagesManager::m_instance = nullptr;
 
@@ -27,6 +29,15 @@ OpenPagesManager::OpenPagesManager(QObject *parent, const QUrl &cmdLineUrl)
     : QObject(parent)
     , m_model(new OpenPagesModel(this))
 {
+    m_openPagesWidget = new OpenPagesWidget(m_model);
+    m_openPagesWidget->setFrameStyle(QFrame::NoFrame);
+    connect(m_openPagesWidget, &OpenPagesWidget::setCurrentPage,
+            this, QOverload<const QModelIndex &>::of(&OpenPagesManager::setCurrentPage));
+    connect(m_openPagesWidget, &OpenPagesWidget::closePage,
+            this, QOverload<const QModelIndex &>::of(&OpenPagesManager::closePage));
+    connect(m_openPagesWidget, &OpenPagesWidget::closePagesExcept,
+            this, &OpenPagesManager::closePagesExcept);
+
     setupInitialPages(cmdLineUrl);
 }
 
@@ -123,6 +134,21 @@ void OpenPagesManager::closePage(HelpViewer *viewer)
     }
 }
 
+void OpenPagesManager::closePagesExcept(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    int i = 0;
+    HelpViewer *viewer = m_model->pageAt(index.row());
+    while (m_model->rowCount() > 1) {
+        if (m_model->pageAt(i) != viewer)
+            removePage(i);
+        else
+            ++i;
+    }
+}
+
 void OpenPagesManager::closePage(const QModelIndex &index)
 {
     if (index.isValid())
@@ -138,6 +164,11 @@ void OpenPagesManager::setCurrentPage(const QModelIndex &index)
 void OpenPagesManager::setCurrentPage(int index)
 {
     setCurrentPage(m_model->pageAt(index));
+}
+
+QAbstractItemView *OpenPagesManager::openPagesWidget() const
+{
+    return m_openPagesWidget;
 }
 
 void OpenPagesManager::setCurrentPage(HelpViewer *page)

@@ -3,8 +3,11 @@
 
 #include <QtCore/QObject>
 
+class QAbstractItemView;
+
 class HelpViewer;
 class OpenPagesModel;
+class OpenPagesWidget;
 
 /**
  * @brief 打开页管理者
@@ -20,6 +23,8 @@ public:
     int pageCount() const;
     void setCurrentPage(int index);
 
+    QAbstractItemView *openPagesWidget() const;
+
 public slots:
     HelpViewer *createPage(const QUrl &url, bool fromSearch = false);
     HelpViewer *createBlankPage();
@@ -28,6 +33,7 @@ public slots:
     void previousPage();
 
     void closePage(HelpViewer *page);
+    void closePagesExcept(const QModelIndex &index);
     void setCurrentPage(HelpViewer *page);
 
 private slots:
@@ -45,6 +51,7 @@ private:
     void nextOrPreviousPage(int offset);
 
     OpenPagesModel *m_model{};
+    OpenPagesWidget *m_openPagesWidget{};
 
     static OpenPagesManager *m_instance;
 };
