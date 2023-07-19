@@ -29,6 +29,8 @@ public:
     explicit OpenPagesWidget(OpenPagesModel *model);
     ~OpenPagesWidget() override;
 
+    void selectCurrentPage();
+
 signals:
     void closePage(const QModelIndex &index);
     void closePagesExcept(const QModelIndex &index);

@@ -24,6 +24,7 @@ public slots:
 private slots:
     void showContents();
     void activateDockWidget(QWidget *w);
+    void handlePageCountChanged();
 
 private:
     void setupActions();
@@ -33,6 +34,7 @@ private:
     CentralWidget *m_centralWidget{};
 
     QAction *m_newTabAction{};
+    QAction *m_closeTabAction{};
     QAction *m_pageSetupAction{};
     QAction *m_syncAction{};
 };

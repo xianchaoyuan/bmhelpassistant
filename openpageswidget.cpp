@@ -1,5 +1,6 @@
 #include "openpageswidget.h"
 #include "openpagesmodel.h"
+#include "centralwidget.h"
 
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QHeaderView>
@@ -40,6 +41,20 @@ OpenPagesWidget::OpenPagesWidget(OpenPagesModel *model)
 
 OpenPagesWidget::~OpenPagesWidget()
 {}
+
+void OpenPagesWidget::selectCurrentPage()
+{
+    const QModelIndex &current =
+        model()->index(CentralWidget::instance()->currentIndex(), 0);
+
+    QItemSelectionModel * const selModel = selectionModel();
+    selModel->select(current,
+                     QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    selModel->clearSelection();
+
+    setCurrentIndex(current);
+    scrollTo(currentIndex());
+}
 
 void OpenPagesWidget::handleClicked(const QModelIndex &index)
 {

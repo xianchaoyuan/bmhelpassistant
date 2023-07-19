@@ -35,10 +35,15 @@ public slots:
     void closePage(HelpViewer *page);
     void closePagesExcept(const QModelIndex &index);
     void setCurrentPage(HelpViewer *page);
+    void closeCurrentPage();
 
 private slots:
     void setCurrentPage(const QModelIndex &index);
     void closePage(const QModelIndex &index);
+
+signals:
+    void pageAdded(int index);
+    void pageClosed();
 
 private:
     OpenPagesManager(QObject *parent, const QUrl &cmdLineUrl);

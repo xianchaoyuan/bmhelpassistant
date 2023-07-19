@@ -74,6 +74,11 @@ void HelpAssistant::activateDockWidget(QWidget *w)
     w->setFocus();
 }
 
+void HelpAssistant::handlePageCountChanged()
+{
+    m_closeTabAction->setEnabled(OpenPagesManager::instance()->pageCount() > 1);
+}
+
 void HelpAssistant::setupActions()
 {
     QString resourcePath = QLatin1String(":/bmhelpassistant/images/");
@@ -83,6 +88,14 @@ void HelpAssistant::setupActions()
     m_newTabAction = menu->addAction(tr("&New Tab"),
                                      openPages, &OpenPagesManager::createBlankPage);
     m_newTabAction->setShortcut(QKeySequence::AddTab);
+    m_closeTabAction = menu->addAction(tr("&Close Tab"),
+                                       openPages, &OpenPagesManager::closeCurrentPage);
+    m_closeTabAction->setShortcuts(QKeySequence::Close);
+    m_closeTabAction->setEnabled(openPages->pageCount() > 1);
+    connect(openPages, &OpenPagesManager::pageClosed,
+            this, &HelpAssistant::handlePageCountChanged);
+    connect(openPages, &OpenPagesManager::pageAdded,
+            this, &HelpAssistant::handlePageCountChanged);
 
     menu->addSeparator();
 

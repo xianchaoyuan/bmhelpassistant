@@ -121,6 +121,7 @@ HelpViewer *OpenPagesManager::createPage(const QUrl &url, bool fromSearch)
     CentralWidget::instance()->addPage(page, fromSearch);
     setCurrentPage(index);
 
+    emit pageAdded(index);
     return page;
 }
 
@@ -174,12 +175,27 @@ QAbstractItemView *OpenPagesManager::openPagesWidget() const
 void OpenPagesManager::setCurrentPage(HelpViewer *page)
 {
     CentralWidget::instance()->setCurrentPage(page);
+    m_openPagesWidget->selectCurrentPage();
+}
+
+void OpenPagesManager::closeCurrentPage()
+{
+    Q_ASSERT(m_model->rowCount() > 1);
+    const QModelIndexList selectedIndexes
+        = m_openPagesWidget->selectionModel()->selectedRows();
+    if (selectedIndexes.isEmpty())
+        return;
+    Q_ASSERT(selectedIndexes.count() == 1);
+    removePage(selectedIndexes.first().row());
 }
 
 void OpenPagesManager::removePage(int index)
 {
     CentralWidget::instance()->removePage(index);
     m_model->removePage(index);
+    m_openPagesWidget->selectCurrentPage();
+
+    emit pageClosed();
 }
 
 void OpenPagesManager::nextPage()

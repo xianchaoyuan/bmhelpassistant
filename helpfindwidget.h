@@ -1,5 +1,5 @@
-#ifndef FINDWIDGET_H
-#define FINDWIDGET_H
+#ifndef HELPFINDWIDGET_H
+#define HELPFINDWIDGET_H
 
 #include <QtWidgets/QWidget>
 
@@ -48,4 +48,4 @@ private:
     QCheckBox *checkCase;
 };
 
-#endif // FINDWIDGET_H
+#endif // HELPFINDWIDGET_H
