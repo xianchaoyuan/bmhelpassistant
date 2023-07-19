@@ -10,13 +10,13 @@ class QToolButton;
 /**
  * @brief 查找
  */
-class FindWidget : public QWidget
+class HelpFindWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit FindWidget(QWidget *parent = nullptr);
-    ~FindWidget() override;
+    explicit HelpFindWidget(QWidget *parent = nullptr);
+    ~HelpFindWidget() override;
 
     void show();
     void close();

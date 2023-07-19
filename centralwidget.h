@@ -6,7 +6,7 @@
 #include <QtWidgets/QStackedWidget>
 
 class HelpViewer;
-class FindWidget;
+class HelpFindWidget;
 class QPrinter;
 
 /**
@@ -106,7 +106,7 @@ private:
     QPrinter *m_printer{};
     TabBar *m_tabBar{};
     QStackedWidget *m_stackedWidget{};
-    FindWidget *m_findWidget{};
+    HelpFindWidget *m_findWidget{};
 };
 
 #endif // CENTRALWIDGET_H

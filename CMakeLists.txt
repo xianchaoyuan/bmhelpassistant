@@ -15,8 +15,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Help Web
 set(PROJECT_SOURCES
     main.cpp
     helpassistant.h helpassistant.cpp
+    helpfindwidget.h helpfindwidget.cpp
     globalactions.h globalactions.cpp
-    findwidget.h findwidget.cpp
     centralwidget.h centralwidget.cpp
     contentwidget.h contentwidget.cpp
     openpageswidget.h openpageswidget.cpp

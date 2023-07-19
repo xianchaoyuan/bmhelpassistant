@@ -1,5 +1,5 @@
 #include "centralwidget.h"
-#include "findwidget.h"
+#include "helpfindwidget.h"
 #include "helpviewer.h"
 #include "helpenginewrapper.h"
 #include "openpagesmanager.h"
@@ -122,7 +122,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     : QWidget(parent)
     , m_tabBar(new TabBar(this))
     , m_stackedWidget(new QStackedWidget(this))
-    , m_findWidget(new FindWidget(this))
+    , m_findWidget(new HelpFindWidget(this))
 {
     staticCentralWidget = this;
 
@@ -135,10 +135,10 @@ CentralWidget::CentralWidget(QWidget *parent)
     vboxLayout->addWidget(m_findWidget);
     m_findWidget->hide();
 
-    connect(m_findWidget, &FindWidget::clearFind, this, &CentralWidget::clearFind);
-    connect(m_findWidget, &FindWidget::findNext, this, &CentralWidget::findNext);
-    connect(m_findWidget, &FindWidget::findPrevious, this, &CentralWidget::findPrevious);
-    connect(m_findWidget, &FindWidget::find, this, &CentralWidget::find);
+    connect(m_findWidget, &HelpFindWidget::clearFind, this, &CentralWidget::clearFind);
+    connect(m_findWidget, &HelpFindWidget::findNext, this, &CentralWidget::findNext);
+    connect(m_findWidget, &HelpFindWidget::findPrevious, this, &CentralWidget::findPrevious);
+    connect(m_findWidget, &HelpFindWidget::find, this, &CentralWidget::find);
 }
 
 CentralWidget::~CentralWidget()
