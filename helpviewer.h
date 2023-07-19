@@ -44,6 +44,7 @@ public:
     bool isBackwardAvailable() const;
 
     void home();
+    void print(QPrinter *printer);
 
     void zoomIn();
     void zoomOut();

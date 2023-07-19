@@ -83,8 +83,6 @@ void HelpAssistant::setupActions()
 
     m_pageSetupAction = menu->addAction(tr("&Page Setup..."),
                                         m_centralWidget, &CentralWidget::pageSetup);
-    m_printPreviewAction = menu->addAction(tr("&Print Preview..."),
-                                           m_centralWidget, &CentralWidget::printPreview);
 
     GlobalActions *globalActions = GlobalActions::instance(this);
     menu->addAction(globalActions->printAction());

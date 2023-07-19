@@ -103,6 +103,11 @@ void HelpViewer::home()
     setSource(HelpEngineWrapper::instance().homePage());
 }
 
+void HelpViewer::print(QPrinter *printer)
+{
+    page()->print(printer, QWebEngineCallback<bool>());
+}
+
 void HelpViewer::zoomIn()
 {
     setZoomFactor(zoomFactor() + 0.1);

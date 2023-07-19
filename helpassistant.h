@@ -34,7 +34,6 @@ private:
 
     QAction *m_newTabAction{};
     QAction *m_pageSetupAction{};
-    QAction *m_printPreviewAction{};
     QAction *m_syncAction{};
 };
 

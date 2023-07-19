@@ -9,6 +9,9 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWebEngineWidgets/QWebEngineHistory>
+#include <QtPrintSupport/QPageSetupDialog>
+#include <QtPrintSupport/QPrintDialog>
+#include <QtPrintSupport/QPrinter>
 
 namespace {
 CentralWidget *staticCentralWidget = nullptr;
@@ -205,17 +208,22 @@ void CentralWidget::home()
 
 void CentralWidget::print()
 {
+    initPrinter();
 
+    QPrintDialog dlg(m_printer, this);
+    dlg.addEnabledOption(QAbstractPrintDialog::PrintPageRange);
+    dlg.addEnabledOption(QAbstractPrintDialog::PrintCollateCopies);
+    dlg.setWindowTitle(tr("Print Document"));
+    if (dlg.exec() == QDialog::Accepted)
+        currentHelpViewer()->print(m_printer);
 }
 
 void CentralWidget::pageSetup()
 {
+    initPrinter();
 
-}
-
-void CentralWidget::printPreview()
-{
-
+    QPageSetupDialog dlg(m_printer, this);
+    dlg.exec();
 }
 
 void CentralWidget::zoomIn()
@@ -304,4 +312,10 @@ void CentralWidget::setCurrentPage(HelpViewer *page)
     m_tabBar->setCurrent(page);
     m_stackedWidget->setCurrentWidget(page);
     emit currentViewerChanged();
+}
+
+void CentralWidget::initPrinter()
+{
+    if (!m_printer)
+        m_printer = new QPrinter(QPrinter::HighResolution);
 }

@@ -7,6 +7,7 @@
 
 class HelpViewer;
 class FindWidget;
+class QPrinter;
 
 /**
  * @brief 选项卡
@@ -76,7 +77,6 @@ public slots:
     //! 打印
     void print();
     void pageSetup();
-    void printPreview();
 
     void zoomIn();
     void zoomOut();
@@ -96,14 +96,17 @@ private:
     void removePage(int index);
     void setCurrentPage(HelpViewer *page);
 
+    void initPrinter();
+
 signals:
     void currentViewerChanged();
     void currentViewerLoadFinished(bool flag);
 
 private:
-    TabBar *m_tabBar;
+    QPrinter *m_printer{};
+    TabBar *m_tabBar{};
     QStackedWidget *m_stackedWidget{};
-    FindWidget *m_findWidget;
+    FindWidget *m_findWidget{};
 };
 
 #endif // CENTRALWIDGET_H
