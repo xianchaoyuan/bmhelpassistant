@@ -5,6 +5,7 @@
 
 class QHelpSearchEngine;
 class QHelpContentWidget;
+class QHelpEngineCore;
 
 class HelpEngineWrapperPrivate;
 
@@ -29,6 +30,8 @@ public:
     QHelpSearchEngine *searchEngine() const;
     QHelpContentWidget *contentWidget() const;
 
+    bool setupData();
+
     QUrl findFile(const QUrl &url) const;
     QByteArray fileData(const QUrl &url) const;
 
@@ -49,6 +52,8 @@ public:
 
     int startOption() const;
     void setStartOption(int option);
+
+    QHelpEngineCore *helpEngine() const;
 
 private:
     explicit HelpEngineWrapper(const QString &collectionFile);

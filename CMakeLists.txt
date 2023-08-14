@@ -31,6 +31,10 @@ set(PROJECT_SOURCES
     helpschemehandler.h
     helpenginewrapper_p.h
     helpenginewrapper.h helpenginewrapper.cpp
+
+    helpdocsettings.h helpdocsettings.cpp
+
+    form.h form.cpp form.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

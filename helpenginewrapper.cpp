@@ -52,6 +52,11 @@ QHelpContentWidget *HelpEngineWrapper::contentWidget() const
     return d->m_helpEngine->contentWidget();
 }
 
+bool HelpEngineWrapper::setupData()
+{
+    return d->m_helpEngine->setupData();
+}
+
 QUrl HelpEngineWrapper::findFile(const QUrl &url) const
 {
     return d->m_helpEngine->findFile(url);
@@ -124,4 +129,9 @@ int HelpEngineWrapper::startOption() const
 void HelpEngineWrapper::setStartOption(int option)
 {
     d->m_helpEngine->setCustomValue(StartOptionKey, option);
+}
+
+QHelpEngineCore *HelpEngineWrapper::helpEngine() const
+{
+    return d->m_helpEngine;
 }

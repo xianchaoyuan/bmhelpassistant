@@ -1,6 +1,7 @@
 #include "helpassistant.h"
 #include "helpenginewrapper.h"
 #include "helpschemehandler.h"
+#include "form.h"
 
 #include <QtWidgets/QApplication>
 
@@ -15,8 +16,11 @@ int main(int argc, char *argv[])
     HelpSchemeHandler handle;
     handle.install();
 
-    HelpAssistant w(QString("C:/Users/yxc/Desktop/jiaoxue/teaching.qhc"));
-    w.show();
+    Form form;
+    form.show();
+
+//    HelpAssistant w(QString("C:/Users/yxc/Desktop/teaching.qhc"));
+//    w.show();
 
     return a.exec();
 }

@@ -4,6 +4,7 @@
 #include "globalactions.h"
 #include "openpagesmanager.h"
 #include "helpenginewrapper.h"
+#include "helpviewer.h"
 
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QToolBar>
@@ -14,11 +15,12 @@
 
 HelpAssistant::HelpAssistant(const QString &collectionFile, QWidget *parent)
     : QMainWindow(parent)
+    , helpEngine(HelpEngineWrapper::instance(collectionFile))
 {
     setToolButtonStyle(Qt::ToolButtonFollowStyle);
     setDockOptions(dockOptions() | AllowNestedDocks);
 
-    HelpEngineWrapper::instance(collectionFile);
+    m_docSettings = HelpDocSettings::readSettings(helpEngine.helpEngine());
 
     m_centralWidget = new CentralWidget(this);
     setCentralWidget(m_centralWidget);
@@ -51,6 +53,40 @@ HelpAssistant::~HelpAssistant()
 {
 }
 
+bool HelpAssistant::addDocumentation(const QString &fileName)
+{
+    if (!m_docSettings.addDocumentation(fileName))
+        return false;
+
+    return true;
+}
+
+bool HelpAssistant::removeDocumentation(const QString &fileName)
+{
+    if (!m_docSettings.removeDocumentation(fileName))
+        return false;
+
+    return true;
+}
+
+bool HelpAssistant::setupDocumentation(const QString &fileName)
+{
+    QMap<QString, QString> namespaceMap = m_docSettings.namespaceToFileName();
+    for (auto &n : namespaceMap.keys()) {
+        if (!removeDocumentation(n)) {
+            return false;
+        }
+    }
+
+    addDocumentation(fileName);
+    applyChanged();
+
+    m_centralWidget->currentHelpViewer()->page()->history()->clear();
+    m_centralWidget->home();
+
+    return true;
+}
+
 void HelpAssistant::syncContents()
 {
     qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -60,6 +96,16 @@ void HelpAssistant::syncContents()
         statusBar()->showMessage(
             tr("Could not find the associated content item."), 3000);
     qApp->restoreOverrideCursor();
+}
+
+void HelpAssistant::applyChanged()
+{
+    bool changed = HelpDocSettings::applySettings(helpEngine.helpEngine(), m_docSettings);
+    if (changed) {
+        helpEngine.setupData();
+    }
+
+    m_docSettings = HelpDocSettings::readSettings(helpEngine.helpEngine());
 }
 
 void HelpAssistant::showContents()
